@@ -1,8 +1,10 @@
-# 手表 QQ 音乐播放器
+# Wear OS 手表音乐播放器
 
 方形 Wear OS 表盘上的在线音乐播放器。纯原生 Android View 实现，不使用 WebView，APK 不到 100KB。
 
-> 非官方项目，与腾讯、QQ 音乐、微信无关，仅供自用，详见文末[免责声明](#免责声明)。
+播放侧对接 QQ 音乐网页端提供的接口，扫码登录后播放自己账号有权收听的内容。
+
+> 非官方项目，与腾讯、QQ 音乐、微信无任何关联，仅供自用，详见文末[免责声明](#免责声明)。
 
 <img src="docs/player-volume.png" width="200" /> <img src="docs/lyric.png" width="200" /> <img src="docs/login-wx.png" width="200" />
 

@@ -826,7 +826,7 @@
     const u = state.user;
     if (state.loggedIn && u) {
       $('#pName').textContent = u.nick || 'QQ 用户';
-      $('#pSub').textContent = u.vip ? 'VIP 会员' : 'QQ 音乐账号已登录';
+      $('#pSub').textContent = u.vip ? 'VIP 会员' : '账号已登录';
       $('#loginText').textContent = '切换账号';
       const av = $('#avatar');
       av.innerHTML = '';
