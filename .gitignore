@@ -1,0 +1,20 @@
+# 构建产物
+build/
+*/build/
+.gradle/
+*.iml
+.gradle-cache/
+
+# 本地环境
+local.properties
+.idea/
+.DS_Store
+
+# 签名密钥 —— 绝不能进仓库
+*.jks
+*.keystore
+*.p12
+
+# 源码打包的自副本
+watch-music-src-*.tar.gz
+watch-music-src-*.zip

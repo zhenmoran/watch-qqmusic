@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>音乐</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 图标精灵：全部内联，避免额外请求 -->
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-4.1 3.4-6.5 7.5-6.5s7.5 2.4 7.5 6.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4 7 12l8 8"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4.2" height="15" rx="1.4" fill="currentColor" stroke="none"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1.4" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M18 5v14L8 12z" fill="currentColor" stroke="none"/><rect x="5" y="5" width="2.4" height="14" rx="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M6 5v14l10-7z" fill="currentColor" stroke="none"/><rect x="16.6" y="5" width="2.4" height="14" rx="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-9.4A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 15.4 12 20 12 20z"/></symbol>
+  <symbol id="i-lyric" viewBox="0 0 24 24"><path d="M4 6h16M4 11h11M4 16h13M4 21h7"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4h-4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z"/><path d="M15.6 8.6a4.6 4.6 0 0 1 0 6.8"/><path d="M18.4 5.8a8.6 8.6 0 0 1 0 12.4"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z"/><path d="M16 9.5l4.5 4.5M20.5 9.5 16 14"/></symbol>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- ============================ 发现 ============================ -->
+  <section class="view" id="v-discover" data-view="discover">
+    <header class="hd">
+      <h1>发现</h1>
+      <button class="icon-btn" data-act="tab" data-tab="search" aria-label="搜索">
+        <svg><use href="#i-search"/></svg>
+      </button>
+    </header>
+    <div class="scroll" id="discoverScroll">
+      <div class="sec">
+        <div class="sec-hd">热门歌单 <span class="spinner" id="hotSpin"></span></div>
+        <div class="grid" id="hotCards"></div>
+      </div>
+      <div class="sec" id="startSec">
+        <button class="start" data-act="tab" data-tab="search">
+          <svg><use href="#i-search"/></svg><span>搜索歌曲，开始播放</span>
+        </button>
+      </div>
+      <div class="sec" id="recentSec" hidden>
+        <div class="sec-hd">最近播放</div>
+        <div class="rows" id="recentRows"></div>
+      </div>
+      <div class="sec" id="favSec" hidden>
+        <div class="sec-hd">我的收藏</div>
+        <div class="rows" id="favRows"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 搜索 ============================ -->
+  <section class="view" id="v-search" data-view="search">
+    <header class="hd hd--search">
+      <div class="field">
+        <svg class="field-ico"><use href="#i-search"/></svg>
+        <input id="searchInput" type="search" placeholder="搜索歌曲" autocomplete="off"
+               enterkeyhint="search" autocorrect="off" spellcheck="false">
+      </div>
+    </header>
+    <div class="scroll">
+      <div id="hotWords" class="chips"></div>
+      <div class="sec-hd sec-hd--inline" id="searchHint" hidden></div>
+      <div class="rows" id="searchRows"></div>
+    </div>
+  </section>
+
+  <!-- ============================ 我的 ============================ -->
+  <section class="view" id="v-mine" data-view="mine">
+    <header class="hd"><h1>我的</h1></header>
+    <div class="scroll">
+      <div class="profile" id="profile">
+        <div class="avatar" id="avatar"><svg><use href="#i-user"/></svg></div>
+        <div class="p-info">
+          <div class="p-name" id="pName">未登录</div>
+          <div class="p-sub" id="pSub">扫码登录后可听完整歌曲</div>
+        </div>
+      </div>
+      <div class="menu">
+        <button class="mrow" data-act="open-fav"><svg><use href="#i-heart"/></svg><span>我的收藏</span><b id="favCount"></b></button>
+        <button class="mrow" data-act="open-recent"><svg><use href="#i-clock"/></svg><span>最近播放</span><b id="recentCount"></b></button>
+        <button class="mrow" data-act="login"><svg><use href="#i-user"/></svg><span id="loginText">扫码登录</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 通用列表（歌单/收藏） ======================= -->
+  <section class="view view--over" id="v-list" data-view="list">
+    <header class="hd hd--over">
+      <button class="icon-btn" data-act="back"><svg><use href="#i-back"/></svg></button>
+      <h2 id="listTitle">歌单</h2>
+      <span class="hd-meta" id="listMeta"></span>
+    </header>
+    <div class="rows rows--full" id="listRows"></div>
+  </section>
+
+  <!-- ============================ 播放器 ============================ -->
+  <section class="view view--over" id="v-player" data-view="player">
+    <div class="player" id="player">
+      <header class="hd hd--flat">
+        <button class="icon-btn" data-act="back"><svg><use href="#i-back"/></svg></button>
+        <span class="hd-meta" id="plFrom">正在播放</span>
+        <button class="icon-btn" data-act="toggle-lyric" aria-label="歌词"><svg><use href="#i-lyric"/></svg></button>
+      </header>
+
+      <!-- 封面区 -->
+      <div class="cover-wrap" id="coverWrap">
+        <div class="cover" id="cover">
+          <img id="coverImg" alt="" decoding="async">
+          <div class="cover-fallback"><svg><use href="#i-play"/></svg></div>
+        </div>
+      </div>
+
+      <!-- 歌词区（与封面区互斥显示） -->
+      <div class="lyric-wrap" id="lyricWrap" hidden>
+        <div class="lyric-scroll" id="lyricScroll"><div class="lyric-inner" id="lyricInner"></div></div>
+      </div>
+
+      <div class="meta">
+        <div class="song" id="pSong">未在播放</div>
+        <div class="singer" id="pSinger"></div>
+      </div>
+
+      <div class="progress" id="progress">
+        <div class="bar"><div class="bar-fill" id="barFill"></div><div class="bar-dot" id="barDot"></div></div>
+      </div>
+      <div class="times"><span id="tCur">0:00</span><span id="tDur">0:00</span></div>
+
+      <div class="controls">
+        <button class="ctl" data-act="prev" aria-label="上一首"><svg><use href="#i-prev"/></svg></button>
+        <button class="ctl ctl--main" data-act="toggle" id="btnPlay" aria-label="播放">
+          <svg id="playIco"><use href="#i-play"/></svg>
+        </button>
+        <button class="ctl" data-act="next" aria-label="下一首"><svg><use href="#i-next"/></svg></button>
+      </div>
+
+      <div class="player-foot">
+        <button class="foot-btn" data-act="fav" id="btnFav">
+          <svg><use href="#i-heart"/></svg><span id="favLabel">收藏</span>
+        </button>
+        <div class="vol">
+          <button class="foot-btn" data-act="mute" id="btnMute" aria-label="静音">
+            <svg id="volIco"><use href="#i-vol"/></svg>
+          </button>
+          <div class="vol-bar" id="volBar"><i id="volFill"></i><b id="volDot"></b></div>
+        </div>
+        <button class="foot-btn" data-act="toggle-lyric"><svg><use href="#i-lyric"/></svg><span>歌词</span></button>
+      </div>
+
+      <div class="swipe-hint" id="swipeHint">上下滑动切歌</div>
+    </div>
+  </section>
+
+  <!-- ============================ 扫码登录 ============================ -->
+  <section class="view view--over" id="v-login" data-view="login">
+    <header class="hd hd--over">
+      <button class="icon-btn" data-act="back"><svg><use href="#i-back"/></svg></button>
+      <h2>扫码登录</h2>
+      <button class="icon-btn" data-act="refresh-qr"><svg><use href="#i-refresh"/></svg></button>
+    </header>
+    <div class="login-box">
+      <div class="login-tabs">
+        <button class="ltab is-on" data-act="login-tab" data-kind="qq">QQ 扫码</button>
+        <button class="ltab" data-act="login-tab" data-kind="wx">微信扫码</button>
+      </div>
+      <div class="qr" id="qrBox">
+        <img id="qrImg" alt="登录二维码" image-rendering="pixelated">
+        <div class="qr-mask" id="qrMask" hidden><span id="qrMaskText">已失效</span></div>
+        <button class="qr-retry" id="qrRetry" hidden data-act="refresh-qr">重新获取</button>
+      </div>
+      <div class="qr-tip" id="qrTip">打开手机 QQ 扫一扫</div>
+    </div>
+  </section>
+
+  <!-- ============================ 迷你播放条 ============================ -->
+  <div class="mini" id="mini" hidden>
+    <img class="mini-cover" id="miniCover" alt="">
+    <div class="mini-txt">
+      <div class="mini-song" id="miniSong"></div>
+      <div class="mini-progress"><i id="miniFill"></i></div>
+    </div>
+    <button class="mini-btn" data-act="toggle" id="miniPlay"><svg id="miniIco"><use href="#i-play"/></svg></button>
+  </div>
+
+  <!-- ============================ 底部标签 ============================ -->
+  <nav class="tabbar" id="tabbar">
+    <button class="tab is-on" data-act="tab" data-tab="discover"><svg><use href="#i-home"/></svg><span>发现</span></button>
+    <button class="tab" data-act="tab" data-tab="search"><svg><use href="#i-search"/></svg><span>搜索</span></button>
+    <button class="tab" data-act="tab" data-tab="mine"><svg><use href="#i-user"/></svg><span>我的</span></button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "watch-qqmusic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "方形 Wear OS 表盘上的在线音乐播放器，对接 QQ 音乐网页接口",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
